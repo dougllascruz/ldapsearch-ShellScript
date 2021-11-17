@@ -1,0 +1,22 @@
+#!/bin/bash
+#Desenvolvido por Douglas Cruz - Para fins de estudo!
+
+ldaphost=ldap://ADSERVER
+ldapuser=USUARIO
+ldappass=SENHA(CUIDADO)
+ldapcn=dc=domain,dc=local
+
+if [[ -z "$2" ]];
+then
+	echo "
+		Exemplos de pesquisas:
+		EX.: # ad-search ""(sAMAccountName=NOME-USUÁRIO)"" name 
+		EX.: # ad-search ""(sAMAccountName=NOME-USUÁRIO)"" memberOf 
+		EX.: # ad-search ""(sAMAccountName=NOME-USUÁRIO)"" distinguishedName
+		EX.: # ad-search ""(name=NOME-USUÁRIO)"" sAMAccountName
+		EX.: # ad-search ""(mail=E-MAIL-DO-USUARIO)"" sAMAccountName
+
+	"
+else
+    	ldapsearch -H $ldaphost -x -D "$ldapuser" -w "$ldappass" -b "$ldapcn" "$1" "$2" | sed -n "s/^$2: //p"
+fi
